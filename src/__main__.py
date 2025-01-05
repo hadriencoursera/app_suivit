@@ -28,7 +28,7 @@ if __name__ == "__main__":
     try:
         button = st.button(label="Generate or Refresh Data")
         if button:
-            generate_dataset_orders(filename=filename, num_rows=1000)
+            generate_dataset_orders(filename=filename, num_rows=100000)
             load_file(db=db, infile_path=filename, table_name=destination_table_name)
 
         data = execute_query(f"select * from {destination_table_name}", db=db, return_type="df")
