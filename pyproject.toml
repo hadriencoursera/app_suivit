@@ -7,6 +7,9 @@ readme = "README.md"
 
 [tool.poetry.dependencies]
 python = "^3.10"
+duckdb = "0.8.1"
+faker = "19.3.1"
+streamlit = "1.26.0"
 
 [tool.poetry.scripts]
 my-script = "src.__main__:run"
