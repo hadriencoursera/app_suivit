@@ -16,7 +16,8 @@ def execute_query(query: str, db: str, return_type: str = "df"):
             return con.execute(query).arrow()
         elif return_type == "list":
             return con.execute(query).fetchall()
-
+        elif return_type == "raw":
+            return con.execute(query).fetchall()[0][0]
 
 @st.cache_data  # An optimization wrapper to memoize the result of the function
 def export_df(df):
@@ -26,12 +27,26 @@ def export_df(df):
 if __name__ == "__main__":
     st.title("Streamlit + duckdb")
     try:
-        button = st.button(label="Generate or Refresh Data")
-        if button:
-            generate_dataset_orders(filename=filename, num_rows=100000)
+        number = st.number_input("Number of line in the dataset",min_value = 1,value = 1,format="%i")
+        number_affichage= "{:,}".format(number).replace(',', ' ').replace('.', ',')
+        st.write("The requested number of line is  ", number_affichage)
+
+        with st.spinner('Wait for data generation...'):
+            generate_dataset_orders(filename=filename, num_rows=number)
             load_file(db=db, infile_path=filename, table_name=destination_table_name)
+        st.success("Done!")
+
+        #button = st.button(label="Generate or Refresh Data")
+        #if button:
+        #    generate_dataset_orders(filename=filename, num_rows=number)
+        #    load_file(db=db, infile_path=filename, table_name=destination_table_name)
+            
 
         data = execute_query(f"select * from {destination_table_name}", db=db, return_type="df")
+
+        st.write("## nombre de lignes")
+        nb_ligne = "{:,}".format(execute_query(f"select count(*) from {destination_table_name}", db=db,return_type="raw")).replace(',', ' ').replace('.', ',')
+        st.write(f"Le nombre de ligne du dataset est de : {nb_ligne}")
 
         st.write("## Sample")
         st.dataframe(data.head(10), height=300)

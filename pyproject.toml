@@ -1,19 +1,11 @@
-[tool.poetry]
+[project]
 name = "app-suivit"
 version = "0.1.0"
-description = "app de suivit"
-authors = ["hadrien <chicault.hadrien@gmail.com>"]
+description = "Add your description here"
 readme = "README.md"
-
-[tool.poetry.dependencies]
-python = "^3.10"
-duckdb = "0.8.1"
-faker = "19.3.1"
-streamlit = "1.26.0"
-
-[tool.poetry.scripts]
-my-script = "src.__main__:run"
-
-[build-system]
-requires = ["poetry-core"]
-build-backend = "poetry.core.masonry.api"
+requires-python = ">=3.10"
+dependencies = [
+    "duckdb==0.8.1",
+    "faker==19.3.1",
+    "streamlit==1.26.0",
+]
